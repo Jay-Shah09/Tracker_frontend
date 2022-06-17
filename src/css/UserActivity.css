@@ -1,0 +1,9 @@
+.single-activity{
+    display:grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    justify-items: center;
+    /* background:orange; */
+    width:65%;
+    margin:0 auto 13px auto;
+    box-shadow: 2px 3px 12px rgba(0,0,0,0.6);
+}
