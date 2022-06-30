@@ -7,8 +7,8 @@
 }
 .header-container{
     width:100%;
-    display: grid;
-    justify-items: end;
+    display: flex;
+    justify-content: right;
 }
 .attendence-btn{
     border:none;

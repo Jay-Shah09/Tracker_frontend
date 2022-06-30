@@ -1,0 +1,40 @@
+.channel-list-container{
+    max-width:1500px;
+    margin:30vh auto 0 auto ;
+}
+@media screen and (max-width: 600px) {
+    .channel-list-container{
+        width: 80%;
+    }
+}
+@media screen and (min-width: 601px) {
+    .channel-list-container{
+        width: 35%;
+    }
+}
+.single-channel{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    margin-top:13px;
+    justify-items: center;
+    box-shadow: 2px 3px 12px rgba(0,0,0,0.6);
+}
+.channel-lists{
+    margin-top: 50px;
+}
+.add-channel-form{
+    display: flex;
+    justify-content: center;
+}
+.add-channel-form input{
+    height: 25px;
+}
+.add-channel-form button{
+    cursor: pointer;
+}
+.delete-channel-btn{
+    color:red;
+    background:transparent;
+    border:none;
+    cursor: pointer;
+}

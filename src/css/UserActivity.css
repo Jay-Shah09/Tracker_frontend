@@ -2,8 +2,16 @@
     display:grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
     justify-items: center;
-    /* background:orange; */
-    width:65%;
     margin:0 auto 13px auto;
     box-shadow: 2px 3px 12px rgba(0,0,0,0.6);
+}
+@media screen and (max-width: 600px) {
+    .single-activity{
+        width:150vw;
+    }
+}
+@media screen and (min-width: 601px) {
+    .single-activity{
+        width:65%;
+    }
 }

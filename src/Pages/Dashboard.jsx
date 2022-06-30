@@ -1,9 +1,14 @@
-import React,{useEffect,useState} from 'react'
+import React,{useEffect,useState,useContext} from 'react'
 import '../css/Dashboard.css'
 import axios from 'axios'
+import {Link} from 'react-router-dom';
 import UserActivity from '../Components/UserActivity';
+import { AppContext } from '../Context';
+import AddBoxIcon from '@mui/icons-material/AddBox';
 
 function Dashboard() {
+    const {channelData, setChannelData} = useContext(AppContext);
+
     if(localStorage.getItem('button_state')===null){
         localStorage.setItem('button_state',false);
     }
@@ -69,7 +74,7 @@ function Dashboard() {
                 username: user.displayName,
                 status: disable ? 'Checked Out' : 'Checked In',
                 // date_time: ipData.timezone.current_time,
-                date_time: `${new Date().toString().substring(4,15)} | ${new Date().toString().substring(16,21)}`,
+                date_time: `${new Date().toString().substring(4,15)} | ${new Date().toString().substring(16,24)}`,
                 userIP: ipData.ip_address,
                 geolocation: `${ipData.longitude}/${ipData.latitude}`,
                 
@@ -77,43 +82,28 @@ function Dashboard() {
         }
         user && ipData && getActivityData();
     },[user,ipData,disable]);
+
+    useEffect(() => {
+        axios.get('https://localhost:3001/auth/getChannelDbData').then((res) => setChannelData(res.data)).catch((err)=>console.log(err));
+    }, []);
     
     const checkInHandler = async () => {
         await setDisable(!disable);
         localStorage.setItem('button_state',true);
         axios.post('https://localhost:3001/auth/addUserActivity', activityData).then((res)=>setActivityDbData(res.data)).catch((err)=>console.log(err));
-        postMessage();
+        channelData && postMessage(channelData);
     }
 
     const checkOutHandler = () => {
         setDisable(!disable);    
-        localStorage.setItem('button_state',false);    
+        localStorage.setItem('button_state',false);
         axios.post('https://localhost:3001/auth/addUserActivity', activityData).then((res)=>setActivityDbData(res.data)).catch((err)=>console.log(err));
-        postMessage();
-    }
-    const postMessage = async() => {
-        const webHookURL = 'https://hooks.slack.com/services/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';
-        const data = {
-            "text": `${activityData.username} ${activityData.status} at ${new Date().toString().substring(16,21)}`
-        }
-        const res = await axios.post(webHookURL, JSON.stringify(data), {
-            withCredentials:false,
-            transformRequest: [(data,headers)=>{
-                delete headers.post["Content-Type"];
-                return data;
-            }]
-        });
-        if(res.status === 200){
-            console.log('message posted successfully');
-        }
-        else{
-            console.log('message is not posted');
-        }
+        channelData && postMessage(channelData);
     }
 
-    useEffect(() => {
-        axios.get('https://localhost:3001/auth/getMessages');
-    },[]);
+    const postMessage = async(channelData) => {
+        axios.post('https://localhost:3001/auth/postMessages', {username:activityData.username, status:activityData.status, time:new Date().toString().substring(16,21), channelInfo: channelData});
+    }
 
     const logoutHandler = () => {
         window.open('https://localhost:3001/auth/logout', '_self');
@@ -122,6 +112,9 @@ function Dashboard() {
     return (
         <div className="dashboard-container">
             <div className="header-container">
+                <div className="logout-btn-container">
+                    <Link to = "/channel-list" style={{marginRight: "30px"}}><AddBoxIcon style={{fontSize: "37px"}} /></Link>
+                </div>
                 <div className="logout-btn-container">
                     <button className="logout-btn attendence-btn" onClick={logoutHandler}>Logout</button>
                 </div>
@@ -134,9 +127,11 @@ function Dashboard() {
                 </div>
             </div>
             <div className="activity-container">
-                {activityDbData && activityDbData.map((item,index)=>{
+                {   
+                    activityDbData && activityDbData.map((item,index)=>{
                         return index<=5 && <UserActivity key={index} item={item}/>
-                })}
+                    })
+                }
             </div>
         </div>
     )

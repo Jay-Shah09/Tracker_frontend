@@ -1,3 +1,32 @@
+======================
+About Context.js file
+======================
+In Context.js file code is written to use state variables and functions globally. We can access those states and functions througout the whole app into any components without props drilling(props drilling : passing states and function from parent to child component step by step), just by using useContext hook.
+
+====================
+About our App
+====================
+
+# UTILITIES
+
+- Login via slack.
+- When a user registers, a user record is created in our database and he/she gets redirected to our app's dashboard.
+- On dashboard there are two buttons 'checkin' and 'checkout'.
+- Checkin button when pressed captures the user's IP, time, date, and geolocation and stores check-in time in the database.
+- Also, post a message on a common slack channel called “tracker” as “<User-name checked in at <hh: mm>”
+- Checkout button is only enabled after the user checks in. Either of the two-button is active at any time. Same feature to store in database as well as post it on the slack group.
+- There is one more button on dashboard which redirect to the page where user have to add slack channels by writing slack channel id so that his/her checkin/checkout update will get posted on added chnnels along with that 'tracker' channel.
+
+# PURPOSE 
+
+- The Sole purpose is to get to know about the working activity of company employee.
+
+
+
+
+
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
